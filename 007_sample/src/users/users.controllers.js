@@ -17,6 +17,7 @@ export const findById = async (req, res) => {
     return res.status(500).send(error);
   }
 };
+
 export const create = async (req, res) => {
   const userBody = req.body;
   try {

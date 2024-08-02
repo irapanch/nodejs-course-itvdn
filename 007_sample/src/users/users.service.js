@@ -1,3 +1,4 @@
+import { BadRequestError } from "../errors/models/bad-request-err.model.js";
 import * as usersRepository from "./users.repository.js";
 
 export const getAllUsers = () => {
@@ -7,10 +8,18 @@ export const getAllUsers = () => {
 export const getUserById = (userId) => {
   return usersRepository.findById(userId);
 };
+export const getUserByLogin = async (login) => {
+  return usersRepository.findByLogin(login);
+};
+export const getRoleByUserId = async (userId) => {
+  const user = await getUserById(userId);
+
+  return user.role;
+};
 export const create = (user) => {
   const possibleUser = usersRepository.findByLogin(user.login);
-  if (possibleUser) {
-    throw new Error("Specified login is already in use");
+  if (!possibleUser) {
+    throw new BadRequestError("Specified login is already in use");
   }
   return usersRepository.create(user);
 };
